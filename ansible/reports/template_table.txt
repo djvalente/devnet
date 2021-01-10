@@ -1,0 +1,31 @@
++----------------------------------------------------+
++------------------TEMPLATES ------------------------+
++----------------------------------------------------+
+Name:             BASIC_TEMPLATE
+Description:      BASIC
+Attached Devices: ['Site-1']
+Device Type:      vedge-cloud
+Template ID:      3ac4a3de-7971-4e0d-9d32-1f66fd5d77ed
++----------------------------------------------------+
++----------------------------------------------------+
+Name:             BASIC_TEMPLATE2
+Description:      TEST
+Attached Devices: ['Site-2']
+Device Type:      vedge-cloud
+Template ID:      501e0468-7f0e-46dd-a7d4-6453c8d49bdd
++----------------------------------------------------+
++----------------------------------------------------+
+Name:             vedge-cloud-test
+Description:      testing
+Attached Devices: ['--', '--']
+Device Type:      vedge-cloud
+Template ID:      131200cf-979c-45b4-b98d-3410b3fd5ee7
++----------------------------------------------------+
++----------------------------------------------------+
+Name:             test-template
+Description:      testing
+Attached Devices: []
+Device Type:      vedge-ASR-1001-X
+Template ID:      d7984b89-e660-4b83-ae67-cbc763761bbc
++----------------------------------------------------+
++----------------------------------------------------+

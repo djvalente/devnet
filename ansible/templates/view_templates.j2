@@ -1,0 +1,12 @@
++----------------------------------------------------+
++------------------TEMPLATES ------------------------+
+{% for template in templates['device_templates'] %}
++----------------------------------------------------+
+Name:             {{ template['templateName'] }}
+Description:      {{ template['templateDescription']}} 
+Attached Devices: {{ template['attached_devices'] }}
+Device Type:          {{ template['deviceType'] }}
+Template ID:          {{ template['templateId'] }}
++----------------------------------------------------+
+{% endfor %}
++----------------------------------------------------+

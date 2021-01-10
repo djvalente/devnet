@@ -1,0 +1,36 @@
+---
+
+- name: vManage API
+  hosts: all 
+  connection: local 
+  gather_facts: no
+
+  roles:
+    - ansible-viptela
+
+  tasks: 
+    - name: ENSURE REPORTS DIRECTORY IS CREATED 
+      file: 
+        path: ./reports 
+        state: directory
+
+    - name: GET Device Templates 
+      vmanage_device_template_facts: 
+        user: "{{ username }}" 
+        host: "{{ inventory_hostname }}" 
+        password: "{{ password }}" 
+        factory_default: no
+      register: templates 
+
+    - name: Build Template Table 
+      template: 
+        src: view_templates.j2 
+        dest: ./reports/template_table.txt
+
+    - name: Create Template Table Variable 
+      set_fact: 
+         templates_table: "{{ lookup('file', 'reports/template_table.txt') }}"
+
+    - name: View Template Table in Terminal 
+      debug: 
+        msg: "{{ templates_table.split('\n') }}"

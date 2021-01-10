@@ -1,0 +1,75 @@
+---
+- name: MAKING API CALLS USING THE REAL TIME API
+  hosts: all 
+  connection: local 
+  gather_facts: no 
+
+  tasks: 
+    - name: GET COOKIE WITH POST 
+      uri: 
+        url: "https://{{ inventory_hostname }}:8443/j_security_check" 
+        method: POST 
+        body: 
+          j_username: "{{ username }}" 
+          j_password: "{{ password }}" 
+        body_format: form-urlencoded 
+        return_content: yes 
+        validate_certs: no 
+      register: login_data 
+      tags: 
+        - always 
+
+    - name: ASSIGN THE SESSION COOKIE TO A VARIABLE 
+      set_fact: 
+        vmanage_cookie: "{{ login_data.set_cookie }}" 
+      tags: 
+        - always 
+
+    - name: VIEW THE COOKIE 
+      debug: 
+        var: vmanage_cookie 
+      tags: 
+        - debug 
+
+    - name: PAUSE FOR VIEWING THE COOKIE 
+      pause: 
+        seconds: 3 
+      tags: 
+        - debug 
+
+    - name: GET REBOOT HISTORY DETAILS 
+      uri: 
+        url: "https://{{ inventory_hostname }}:8443/dataservice/device/reboothistory/details" 
+        method: GET 
+        headers: 
+          Cookie: "{{ vmanage_cookie }}" 
+        return_content: yes 
+        validate_certs: no 
+      register: reboot_history 
+      tags: 
+        - reboot 
+
+    - name: PRINT REBOOT HISTORY 
+      debug: 
+        var: reboot_history 
+      tags: 
+        - debug
+
+    - name: GET TUNNEL STATS
+      uri: 
+        url: "https://{{ inventory_hostname }}:8443/dataservice/device/tunnel/statistics?deviceId={{ item }}" 
+        method: GET 
+        headers: 
+          Cookie: "{{ vmanage_cookie }}" 
+        return_content: yes 
+        validate_certs: no
+      loop: ['1.250.1.1', '1.100.1.2']
+      register: tunnel_stats 
+      tags: 
+        - tunnel 
+
+    - name: DEBUG TUNNEL STATS 
+      debug: 
+        var: tunnel_stats.keys() 
+      tags: 
+        - tunnel

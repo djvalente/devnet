@@ -1,0 +1,33 @@
+---
+
+- name: vManage API
+  hosts: all 
+  connection: local 
+  gather_facts: no 
+
+  roles: 
+    - ansible-viptela 
+
+  tasks: 
+
+    - name: ENSURE REPORTS DIRECTORY IS CREATED 
+      file: 
+        path: ./reports 
+        state: directory 
+
+    - name: GET Feature Templates 
+      vmanage_feature_template_facts: 
+        host: "{{ inventory_hostname }}" 
+        user: "{{ username }}" 
+        password: "{{ password }}" 
+        factory_default: no 
+      register: features
+
+    - name: PRINT FEATURES DATA
+      debug: 
+        var: features
+
+    - name: Build Template Table 
+      template: 
+        src: feature-template.j2 
+        dest: ./reports/feature_data.txt

@@ -1,0 +1,35 @@
+
+---
+- name: vManage API
+  hosts: all 
+  connection: local 
+  gather_facts: no 
+
+  roles:
+    - ansible-viptela
+
+  tasks: 
+    - name: ENSURE REPORTS DIRECTORY IS CREATED 
+      file: 
+        path: ./reports 
+        state: directory 
+
+    - name: GET vManage Inventory 
+      vmanage_device_facts: 
+        user: "{{ username }}" 
+        host: "{{ inventory_hostname }}" 
+        password: "{{ password }}" 
+      register: devices
+
+    - name: Build Device Table 
+      template: 
+        src: 'device_table.j2' 
+        dest: reports/device_table.txt
+
+    - name: Create Inventory Table Variable 
+      set_fact: 
+        inventory_data: "{{ lookup('file', 'reports/device_table.txt') }}"
+
+    - name: View Inventory Table in Terminal 
+      debug: 
+        msg: "{{ inventory_data.split('\n') }}"

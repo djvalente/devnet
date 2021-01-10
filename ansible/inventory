@@ -1,0 +1,6 @@
+[all:vars]
+username=bit-ro
+password=CSLU9N2JsRxhLjn
+
+[sdwan]
+193.126.238.100

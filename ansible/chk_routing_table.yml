@@ -1,0 +1,31 @@
+---
+- name: Check routing table
+  hosts: all
+  connection: local
+  tasks:
+    - name: OBTAIN SESSION COOKIE
+      uri:
+        url: https://{{ inventory_hostname }}:8443/j_security_check
+        method: POST
+        body:
+          j_username: "{{ username }}"
+          j_password: "{{ password }}"
+        body_format: form-urlencoded
+        validate_certs: no
+      register: login_data
+    - name: CHECK ROUTING TABLE WITH uri MODULE
+      uri:
+        url: https://{{ inventory_hostname }}:8443/dataservice/device/ip/routetable?deviceId={{ device_ip }}
+        headers:
+          Cookie: "{{ login_data.set_cookie }}"
+        body_format: json
+        return_content: yes
+        validate_certs: no
+      vars:
+        device_ip: 1.250.1.1
+      register: routing_data
+    - name: PRINT ROUTING DATA
+      debug: var=routing_data.json.data
+    - name: COUNT THE NUMBER OF ROUTES
+      debug:
+        msg: "Routing table has {{ routing_data.json.data | length }} routes"
