@@ -1,0 +1,9 @@
+FROM alpine:3.7
+RUN apk add --no-cache bash
+# To execute container - nao permite parametros adicionais
+# CMD ["/bin/echo", "Test"]
+
+# Usado para tratar o container como executavel, podemos adicionar parametro no docker run
+ENTRYPOINT ["/bin/echo", "Test"]
+
+# RUN é apenas usado para construir imagens e nao para as colocar a correr.
